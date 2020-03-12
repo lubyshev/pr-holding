@@ -45,7 +45,7 @@ class AppleEntity implements AppleInterface
         // $createdAt         = (new )
         //    ->sub(new \DateInterval("P{$daysAgo}D{$hoursAgo}H"));
 
-        $model->created_at = $createdAt ?? $createdAt;
+        $model->created_at = $createdAt ? $createdAt->getTimestamp() : time();
 
         self::$factoryInProgress = true;
         $result                  = new AppleEntity($model);

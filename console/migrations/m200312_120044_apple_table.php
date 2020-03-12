@@ -18,9 +18,9 @@ class m200312_120044_apple_table extends Migration
                 'id'         => $this->primaryKey()->unsigned(),
                 'color'      => "ENUM('green', 'red', 'yellow') NOT NULL",
                 'state'      => "ENUM('on_tree', 'on_ground', 'rotten') NOT NULL DEFAULT 'on_tree'",
-                'created_at' => $this->dateTime()->notNull()
+                'created_at' => $this->integer()->notNull()
                     ->defaultValue(new \yii\db\Expression('NOW()')),
-                'fall_at'    => $this->dateTime()->null(),
+                'fall_at'    => $this->integer()->notNull(),
                 'size'       => $this->decimal(7, 6)->notNull()->defaultValue(1),
             ], $tableOptions);
             $this->createIndex('created_at', '{{%apple}}', 'created_at');
