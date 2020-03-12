@@ -20,7 +20,7 @@ class m200312_120044_apple_table extends Migration
                 'state'      => "ENUM('on_tree', 'on_ground', 'rotten') NOT NULL DEFAULT 'on_tree'",
                 'created_at' => $this->integer()->notNull()
                     ->defaultValue(new \yii\db\Expression('NOW()')),
-                'fall_at'    => $this->integer()->notNull(),
+                'fall_at'    => $this->integer()->null(),
                 'size'       => $this->decimal(7, 6)->notNull()->defaultValue(1),
             ], $tableOptions);
             $this->createIndex('created_at', '{{%apple}}', 'created_at');
