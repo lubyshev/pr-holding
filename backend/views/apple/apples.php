@@ -1,5 +1,7 @@
 <?php
 
+use yii\helpers\Html;
+
 /* @var $this yii\web\View */
 /* @var $items array|null */
 
@@ -14,16 +16,12 @@ $this->title = 'Яблочный сад';
   <div class="body-content">
 
     <div class="row">
-      <a
-          class="btn btn-default"
-          href="/admin/apple/genesis"
-          title="Создать еще 10"
-      >Генезис &raquo;</a>
-      <a
-          class="btn btn-default"
-          href="/admin/apple/fall-of-man"
-          title="Собрать весь урожай"
-      >Грехопадение &raquo;</a>
+        <?= Html::a('Генезис',
+            ['genesis'],
+            ['class' => 'btn btn-success', 'title' => 'Создать еще 10']) ?>
+        <?= Html::a('Грехопадение: собрать урожай',
+            ['fall-of-man'],
+            ['class' => 'btn btn-danger', 'title' => 'Удалить все']) ?>
     </div>
 
     <div class="row">

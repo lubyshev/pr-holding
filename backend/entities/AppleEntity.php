@@ -97,7 +97,7 @@ class AppleEntity implements AppleInterface
             $diff = (new \DateTimeImmutable())->diff($this->fallAt());
             if (
                 $diff->y || $diff->m || $diff->d
-                || ($diff->h && 5 <= $diff->h)
+                || 5 <= $diff->h
             ) {
                 // Прошло больше 5-ти часов
                 $this->markAsRotten()->save();
@@ -190,10 +190,17 @@ class AppleEntity implements AppleInterface
                 "Невозможен переход из `{$this->model->state}` в `".self::STATE_ON_GROUND."`."
             );
         }
-        $this->model->fall_at =
-            $fallAt
-                ? $fallAt->getTimestamp()
-                : time();
+        if ($fallAt) {
+            if ($fallAt <= $this->createdAt()) {
+                throw new AppleException(
+                    "Время падения не может быть меньше времени создания."
+                );
+            }
+            $fallTime = $fallAt->getTimestamp();
+        } else {
+            $fallTime = time();
+        }
+        $this->model->fall_at = $fallTime;
         $this->model->state   = self::STATE_ON_GROUND;
 
         return $this;
