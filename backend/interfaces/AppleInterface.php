@@ -28,6 +28,8 @@ interface AppleInterface
 
     public function save(): void;
 
+    public function delete(): void;
+
     public function isDeleted(): bool;
 
     public function getId(): int;

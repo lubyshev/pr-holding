@@ -34,17 +34,10 @@ class AppleEntity implements AppleInterface
             throw new AppleException("Невозможно создать AppleEntity цвета `{$color}`.");
         }
 
-        $model        = new AppleModel();
-        $model->color = $color;
-        $model->state = self::STATE_ON_TREE;
-        $model->size  = 1;
-
-        /** @todo Перести в скрипт генерации */
-        // $daysAgo           = rand(0, 9);
-        // $hoursAgo          = rand(0, 23);
-        // $createdAt         = (new )
-        //    ->sub(new \DateInterval("P{$daysAgo}D{$hoursAgo}H"));
-
+        $model             = new AppleModel();
+        $model->color      = $color;
+        $model->state      = self::STATE_ON_TREE;
+        $model->size       = 1;
         $model->created_at = $createdAt ? $createdAt->getTimestamp() : time();
 
         self::$factoryInProgress = true;
@@ -64,7 +57,9 @@ class AppleEntity implements AppleInterface
         if ($items) {
             $result = [];
             foreach ($items as $item) {
-                $result[] = (new AppleEntity($item))->checkForRotten();
+                self::$factoryInProgress = true;
+                $result[]                = (new AppleEntity($item))->checkForRotten();
+                self::$factoryInProgress = false;
             }
         }
 
@@ -80,8 +75,13 @@ class AppleEntity implements AppleInterface
     {
         $result = null;
         $item   = AppleModel::findOne(['id' => $id]);
+        if ($item) {
+            self::$factoryInProgress = true;
+            $result                  = (new AppleEntity($item))->checkForRotten();
+            self::$factoryInProgress = false;
+        }
 
-        return $item ? (new AppleEntity($item))->checkForRotten() : null;
+        return $result;
     }
 
     /**
@@ -112,6 +112,12 @@ class AppleEntity implements AppleInterface
         if (!$this->isDeleted()) {
             $this->model->save();
         }
+    }
+
+    public function delete(): void
+    {
+        $this->model->delete();
+        $this->deleted = true;
     }
 
     public function isDeleted(): bool
