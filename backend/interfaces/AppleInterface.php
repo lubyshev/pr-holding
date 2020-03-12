@@ -20,7 +20,7 @@ interface AppleInterface
     public const STATE_ON_GROUND = 'on_ground';
     public const STATE_ROTTEN    = 'rotten';
 
-    public static function create(string $color): AppleInterface;
+    public static function create(string $color, ?\DateTimeImmutable $createdAt): AppleInterface;
 
     public static function findAll(): ?array;
 

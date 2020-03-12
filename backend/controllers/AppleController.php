@@ -23,17 +23,17 @@ class AppleController extends Controller
                 'rules' => [
                     [
                         'actions' => ['login', 'error'],
-                        'allow' => true,
+                        'allow'   => true,
                     ],
                     [
                         'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow'   => true,
+                        'roles'   => ['@'],
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
+            'verbs'  => [
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],

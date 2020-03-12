@@ -23,7 +23,7 @@ class AppleEntity implements AppleInterface
         $this->model = $model;
     }
 
-    public static function create(string $color): AppleInterface
+    public static function create(string $color, ?\DateTimeImmutable $createdAt): AppleInterface
     {
 
         if (!in_array($color, [
@@ -34,16 +34,18 @@ class AppleEntity implements AppleInterface
             throw new AppleException("Невозможно создать AppleEntity цвета `{$color}`.");
         }
 
-        $daysAgo   = rand(0, 9);
-        $hoursAgo  = rand(0, 23);
-        $createdAt = (new \DateTimeImmutable())
-            ->sub(new \DateInterval("P{$daysAgo}D{$hoursAgo}H"));
+        $model        = new AppleModel();
+        $model->color = $color;
+        $model->state = self::STATE_ON_TREE;
+        $model->size  = 1;
 
-        $model             = new AppleModel();
-        $model->color      = $color;
-        $model->state      = self::STATE_ON_TREE;
-        $model->size       = 1;
-        $model->created_at = $createdAt->getTimestamp();
+        /** @todo Перести в скрипт генерации */
+        // $daysAgo           = rand(0, 9);
+        // $hoursAgo          = rand(0, 23);
+        // $createdAt         = (new )
+        //    ->sub(new \DateInterval("P{$daysAgo}D{$hoursAgo}H"));
+
+        $model->created_at = $createdAt ?? $createdAt;
 
         self::$factoryInProgress = true;
         $result                  = new AppleEntity($model);
