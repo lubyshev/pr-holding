@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpClassNamingConventionInspection */
+<?php
+/** @noinspection PhpClassNamingConventionInspection */
+
 declare(strict_types=1);
 
 use yii\db\Migration;
@@ -13,18 +15,17 @@ class m200312_120044_apple_table extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
             $this->createTable('{{%apple}}', [
-                'id'                   => $this->primaryKey(),
-                'username'             => $this->string()->notNull()->unique(),
-                'auth_key'             => $this->string(32)->notNull(),
-                'password_hash'        => $this->string()->notNull(),
-                'password_reset_token' => $this->string()->unique(),
-                'email'                => $this->string()->notNull()->unique(),
-
-                'status'     => $this->smallInteger()->notNull()->defaultValue(10),
-                'created_at' => $this->integer()->notNull(),
-                'updated_at' => $this->integer()->notNull(),
+                'id'         => $this->primaryKey()->unsigned(),
+                'color'      => "ENUM('green', 'red', 'yellow') NOT NULL",
+                'state'      => "ENUM('on_tree', 'on_ground', 'rotten') NOT NULL DEFAULT 'on_tree'",
+                'created_at' => $this->dateTime()->notNull()
+                    ->defaultValue(new \yii\db\Expression('NOW()')),
+                'fall_at'    => $this->dateTime()->null(),
+                'size'       => $this->decimal(7, 6)->notNull()->defaultValue(1),
             ], $tableOptions);
+            $this->createIndex('created_at', '{{%apple}}', 'created_at');
         } else {
+            // Из-за ENUM()
             throw new \yii\db\Exception("Реализовано только для MySql.");
         }
     }
