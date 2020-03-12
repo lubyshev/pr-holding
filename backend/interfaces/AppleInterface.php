@@ -54,4 +54,6 @@ interface AppleInterface
 
     public function isRotten(): bool;
 
+    public function checkForRotten(): self;
+
 }

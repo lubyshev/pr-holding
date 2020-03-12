@@ -62,19 +62,7 @@ class AppleEntity implements AppleInterface
         if ($items) {
             $result = [];
             foreach ($items as $item) {
-                $entity = new AppleEntity($item);
-                // Проверка на гниль
-                if ($entity->isOnOnGround() && !$entity->isRotten()) {
-                    $diff = (new \DateTimeImmutable())->diff($entity->fallAt());
-                    if (
-                        $diff->y || $diff->m || $diff->d
-                        || ($diff->h && 5 <= $diff->h)
-                    ) {
-                        // Прошло больше 5-ти часов
-                        $entity->markAsRotten()->save();
-                    }
-                }
-                $result[] = $entity;
+                $result[] = (new AppleEntity($item))->checkForRotten();
             }
         }
 
@@ -91,7 +79,30 @@ class AppleEntity implements AppleInterface
         $result = null;
         $item   = AppleModel::findOne(['id' => $id]);
 
-        return $item ? new AppleEntity($item) : null;
+        return $item ? (new AppleEntity($item))->checkForRotten() : null;
+    }
+
+    /**
+     * Проверка на загнивание
+     *
+     * @param \backend\entities\AppleEntity $entity
+     *
+     * @throws \backend\exceptions\AppleException
+     */
+    public function checkForRotten(): self
+    {
+        if ($this->isOnOnGround() && !$this->isRotten()) {
+            $diff = (new \DateTimeImmutable())->diff($this->fallAt());
+            if (
+                $diff->y || $diff->m || $diff->d
+                || ($diff->h && 5 <= $diff->h)
+            ) {
+                // Прошло больше 5-ти часов
+                $this->markAsRotten()->save();
+            }
+        }
+
+        return $this;
     }
 
     public function save(): void
