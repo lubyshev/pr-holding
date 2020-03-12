@@ -93,7 +93,7 @@ class AppleEntity implements AppleInterface
      */
     public function checkForRotten(): self
     {
-        if ($this->isOnOnGround() && !$this->isRotten()) {
+        if ($this->isOnGround() && !$this->isRotten()) {
             $diff = (new \DateTimeImmutable())->diff($this->fallAt());
             if (
                 $diff->y || $diff->m || $diff->d
@@ -137,7 +137,7 @@ class AppleEntity implements AppleInterface
 
     public function eat(int $percent): self
     {
-        if (!$this->isOnOnGround()) {
+        if (!$this->isOnGround()) {
             throw new AppleException(
                 "Невозможно съесть когда не на земле."
             );
@@ -173,44 +173,40 @@ class AppleEntity implements AppleInterface
         return new \DateTimeImmutable(date('Y-m-d H:i:s', $this->model->created_at));
     }
 
-    public function setFallAt(\DateTimeImmutable $value): self
-    {
-        $this->model->fall_at = $value->getTimestamp();
-
-        return $this;
-    }
-
     public function fallAt(): \DateTimeImmutable
     {
         return new \DateTimeImmutable(date('Y-m-d H:i:s', $this->model->fall_at));
     }
 
-    public function isOnOnTree(): bool
+    public function isOnTree(): bool
     {
         return self::STATE_ON_TREE === $this->model->state;
     }
 
-    public function fallOnGround(): self
+    public function fallOnGround(?\DateTimeImmutable $fallAt): self
     {
-        if (!$this->isOnOnTree()) {
+        if (!$this->isOnTree()) {
             throw new AppleException(
                 "Невозможен переход из `{$this->model->state}` в `".self::STATE_ON_GROUND."`."
             );
         }
-        $this->model->fall_at = time();
+        $this->model->fall_at =
+            $fallAt
+                ? $fallAt->getTimestamp()
+                : time();
         $this->model->state   = self::STATE_ON_GROUND;
 
         return $this;
     }
 
-    public function isOnOnGround(): bool
+    public function isOnGround(): bool
     {
         return self::STATE_ON_GROUND === $this->model->state;
     }
 
     public function markAsRotten(): self
     {
-        if (!$this->isOnOnGround()) {
+        if (!$this->isOnGround()) {
             throw new AppleException(
                 "Невозможен переход из `{$this->model->state}` в `".self::STATE_ROTTEN."`."
             );

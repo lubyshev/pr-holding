@@ -42,15 +42,13 @@ interface AppleInterface
 
     public function createdAt(): \DateTimeImmutable;
 
-    public function setFallAt(\DateTimeImmutable $value): self;
+    public function isOnTree(): bool;
+
+    public function fallOnGround(?\DateTimeImmutable $fallAt): self;
+
+    public function isOnGround(): bool;
 
     public function fallAt(): \DateTimeImmutable;
-
-    public function isOnOnTree(): bool;
-
-    public function fallOnGround(): self;
-
-    public function isOnOnGround(): bool;
 
     public function markAsRotten(): self;
 
