@@ -98,8 +98,6 @@ class AppleEntity implements AppleInterface
     /**
      * Проверка на загнивание
      *
-     * @param \backend\entities\AppleEntity $entity
-     *
      * @throws \backend\exceptions\AppleException
      */
     public function checkForRotten(): self

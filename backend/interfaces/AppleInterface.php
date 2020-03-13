@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace backend\interfaces;
 
-use backend\models\AppleModel;
-
 /**
  * Интерфейс яблока.
  *

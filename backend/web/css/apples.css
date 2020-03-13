@@ -17,14 +17,13 @@ td.apple-state {
     text-align: center;
 }
 td.apple-form,
-td.apple-size{
+td.apple-size {
     text-align: right;
 }
-input.apple-eat{
+input.apple-eat {
     padding-left: 5px;
 }
-
 input.apple-password {
-    margin: 0 10px;
+    margin:       0 10px;
     padding-left: 5px;
 }

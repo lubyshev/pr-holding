@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpClassNamingConventionInspection */
 
 use yii\db\Migration;
 
