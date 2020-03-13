@@ -23,3 +23,8 @@ td.apple-size{
 input.apple-eat{
     padding-left: 5px;
 }
+
+input.apple-password {
+    margin: 0 10px;
+    padding-left: 5px;
+}

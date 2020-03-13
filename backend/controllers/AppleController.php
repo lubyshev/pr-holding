@@ -31,7 +31,7 @@ class AppleController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['error'],
+                        'actions' => ['error', 'get-access'],
                         'allow'   => true,
                     ],
                     [
@@ -53,6 +53,25 @@ class AppleController extends Controller
     /**
      * {@inheritdoc}
      */
+    public function beforeAction($action): bool
+    {
+        $result = parent::beforeAction($action);
+        if ($result) {
+            if (!in_array($action->id, ['error', 'get-access'])) {
+                if (!\Yii::$app->user->can('applePermisison')) {
+                    $this->redirect('/admin/apple/get-access');
+                }
+
+                return true;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function actions()
     {
         return [
@@ -69,9 +88,7 @@ class AppleController extends Controller
      */
     public function actionIndex()
     {
-        //AppleEntity::findAll();
-        //die();
-        return $this->render('apples', [
+        return $this->render('index', [
             'items' => AppleEntity::findAll(),
         ]);
     }
@@ -131,7 +148,7 @@ class AppleController extends Controller
     }
 
     /**
-     * Удаление всех яблок.
+     * Действия над яблоком.
      *
      * @return void
      */
@@ -159,6 +176,31 @@ class AppleController extends Controller
         }
 
         $this->redirect('/admin/apple');
+    }
+
+    /**
+     * Полуучение доступа.
+     *
+     * @return string
+     */
+    public function actionGetAccess()
+    {
+        $request = \Yii::$app->request;
+        $post    = $request->post();
+        $error   = null;
+        if (!empty($post) && isset($post['password'])) {
+            if ('adam' === $post['password']) {
+                $auth      = \Yii::$app->authManager;
+                $appleRole = $auth->getRole('appleRole');
+                $auth->assign($appleRole, \Yii::$app->user->getId());
+
+                $this->redirect('/admin/apple');
+            } else {
+                $error = 'Молитва не услышана! Попробуйте еще раз.';
+            }
+        }
+
+        return $this->render('access', ['error' => $error]);
     }
 
 }
