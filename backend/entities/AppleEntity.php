@@ -102,7 +102,7 @@ class AppleEntity implements AppleInterface
      */
     public function checkForRotten(): self
     {
-        if ($this->isOnGround() && !$this->isRotten()) {
+        if ($this->isOnGround()) {
             $diff = (new \DateTimeImmutable())->diff($this->fallAt());
             if (
                 $diff->y || $diff->m || $diff->d
