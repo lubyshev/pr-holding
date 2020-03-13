@@ -1,0 +1,25 @@
+.table.apples-table th {
+    vertical-align: middle;
+    text-align:     center;
+}
+td.apple-green {
+    background: #b2dba1;
+}
+td.apple-red {
+    background: #b94a48;
+}
+td.apple-yellow {
+    background: #ffc107;
+}
+td.apple-created,
+td.apple-fall,
+td.apple-state {
+    text-align: center;
+}
+td.apple-form,
+td.apple-size{
+    text-align: right;
+}
+input.apple-eat{
+    padding-left: 5px;
+}

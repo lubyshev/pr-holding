@@ -20,7 +20,7 @@ interface AppleInterface
     public const STATE_ON_GROUND = 'on_ground';
     public const STATE_ROTTEN    = 'rotten';
 
-    public static function create(string $color, ?\DateTimeImmutable $createdAt): AppleInterface;
+    public static function create(string $color, ?\DateTimeImmutable $createdAt = null): AppleInterface;
 
     public static function findAll(): ?array;
 
@@ -44,7 +44,7 @@ interface AppleInterface
 
     public function isOnTree(): bool;
 
-    public function fallOnGround(?\DateTimeImmutable $fallAt): self;
+    public function fallOnGround(?\DateTimeImmutable $fallAt = null): self;
 
     public function isOnGround(): bool;
 

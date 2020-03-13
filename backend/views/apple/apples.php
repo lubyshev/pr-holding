@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $items array|null */
+/* @var $items \backend\interfaces\AppleInterface[]|null */
 
 $this->title = 'Яблочный сад';
 ?>
@@ -31,15 +31,12 @@ $this->title = 'Яблочный сад';
     </div>
 
     <div class="row">
-        <?php if (!empty($items)): ?>
-            <?php
-            foreach ($items as $item) {
-                echo $this->render('item', ['item' => $item]);
-            }
-            ?>
-        <?php else: ?>
+        <?php
+        if (!empty($items)) {
+            echo $this->render('items', ['items' => $items]);
+        } else { ?>
           <h3>Нет данных.</h3>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 
   </div>

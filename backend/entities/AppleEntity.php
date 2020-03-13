@@ -23,7 +23,16 @@ class AppleEntity implements AppleInterface
         $this->model = $model;
     }
 
-    public static function create(string $color, ?\DateTimeImmutable $createdAt): AppleInterface
+    /**
+     * Фабрика для создания яблок.
+     *
+     * @param string                  $color
+     * @param \DateTimeImmutable|null $createdAt
+     *
+     * @return \backend\interfaces\AppleInterface
+     * @throws \backend\exceptions\AppleException
+     */
+    public static function create(string $color, ?\DateTimeImmutable $createdAt = null): AppleInterface
     {
         if (!in_array($color, [
             self::COLOR_GREEN,
@@ -167,7 +176,7 @@ class AppleEntity implements AppleInterface
 
     public function getSize(): float
     {
-        return $this->model->size;
+        return (float)$this->model->size;
     }
 
     public function createdAt(): \DateTimeImmutable
@@ -185,7 +194,7 @@ class AppleEntity implements AppleInterface
         return self::STATE_ON_TREE === $this->model->state;
     }
 
-    public function fallOnGround(?\DateTimeImmutable $fallAt): self
+    public function fallOnGround(?\DateTimeImmutable $fallAt = null): self
     {
         if (!$this->isOnTree()) {
             throw new AppleException(

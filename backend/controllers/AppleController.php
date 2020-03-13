@@ -7,6 +7,7 @@ use backend\entities\AppleEntity;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -30,11 +31,11 @@ class AppleController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['error'],
                         'allow'   => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'genesis', 'fall-of-man'],
+                        'actions' => ['index', 'genesis', 'fall-of-man', 'update'],
                         'allow'   => true,
                         'roles'   => ['@'],
                     ],
@@ -68,7 +69,9 @@ class AppleController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('apple', [
+        //AppleEntity::findAll();
+        //die();
+        return $this->render('apples', [
             'items' => AppleEntity::findAll(),
         ]);
     }
@@ -88,7 +91,7 @@ class AppleController extends Controller
         $rottenReady = 3;
         $tm          = time();
         for ($i = 0; $i < self::AUTO_CREATE_COUNT; $i++) {
-            $daysAgo   = rand(0, 9);
+            $daysAgo   = rand(1, 9);
             $hoursAgo  = rand(0, 23);
             $createdAt = (new \DateTimeImmutable(date('Y-m-d H:i:s', $tm - 3600)))
                 ->sub(new \DateInterval("P{$daysAgo}DT{$hoursAgo}H"));
@@ -97,9 +100,9 @@ class AppleController extends Controller
 
             // Создадим несколько упавших
             if ($rottenReady) {
-                $minutesLeft = 5 * $rottenReady;
+                $minutesLeft = 60 - 5 * $rottenReady;
                 $fallAt      = (new \DateTimeImmutable())
-                    ->sub(new \DateInterval("PT{$minutesLeft}M"));
+                    ->sub(new \DateInterval("PT4H{$minutesLeft}M"));
                 $item->fallOnGround($fallAt);
                 $rottenReady--;
             }
@@ -127,5 +130,35 @@ class AppleController extends Controller
         $this->redirect('/admin/apple');
     }
 
+    /**
+     * Удаление всех яблок.
+     *
+     * @return void
+     */
+    public function actionUpdate()
+    {
+        $request = \Yii::$app->request;
+        $id      = (int)$request->get('id');
+        if ($id > 0) {
+            $post = $request->post();
+            if (!empty($post)) {
+                $item = AppleEntity::findById($id);
+                if (!$item) {
+                    throw new NotFoundHttpException();
+                }
+                if (isset($post['apple-eat'])) {
+                    $item
+                        ->eat((int)$post['apple-eat-value'])
+                        ->save();
+                } elseif (isset($post['apple-fall'])) {
+                    $item
+                        ->fallOnGround()
+                        ->save();
+                }
+            }
+        }
+
+        $this->redirect('/admin/apple');
+    }
 
 }
