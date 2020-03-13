@@ -25,13 +25,15 @@ class AppleEntity implements AppleInterface
 
     public static function create(string $color, ?\DateTimeImmutable $createdAt): AppleInterface
     {
-
         if (!in_array($color, [
             self::COLOR_GREEN,
             self::COLOR_YELLOW,
             self::COLOR_RED,
         ])) {
             throw new AppleException("Невозможно создать AppleEntity цвета `{$color}`.");
+        }
+        if ($createdAt && $createdAt > new \DateTimeImmutable()) {
+            throw new AppleException("Дата создания не может быть больше текущей.");
         }
 
         $model             = new AppleModel();
