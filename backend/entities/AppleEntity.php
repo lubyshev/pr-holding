@@ -182,9 +182,12 @@ class AppleEntity implements AppleInterface
         return new \DateTimeImmutable(date('Y-m-d H:i:s', $this->model->created_at));
     }
 
-    public function fallAt(): \DateTimeImmutable
+    public function fallAt(): ?\DateTimeImmutable
     {
-        return new \DateTimeImmutable(date('Y-m-d H:i:s', $this->model->fall_at));
+        return
+            $this->model->fall_at
+                ? new \DateTimeImmutable(date('Y-m-d H:i:s', $this->model->fall_at))
+                : null;
     }
 
     public function isOnTree(): bool

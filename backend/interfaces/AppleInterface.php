@@ -46,7 +46,7 @@ interface AppleInterface
 
     public function isOnGround(): bool;
 
-    public function fallAt(): \DateTimeImmutable;
+    public function fallAt(): ?\DateTimeImmutable;
 
     public function markAsRotten(): self;
 
